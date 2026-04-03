@@ -12,7 +12,7 @@
 #define STD_GLBL_HPP
 
 // Version information.
-const std::string ARES_VERSION = "0.0.12-alpha";
+const std::string ARES_VERSION = "0.0.13-alpha";
 
 // Help Message Constant, for in case you MESS UP THE SYNTAX.
 // Read the docks ffs.

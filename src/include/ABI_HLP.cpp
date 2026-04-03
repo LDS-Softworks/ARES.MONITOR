@@ -1,6 +1,6 @@
 #include "std_glbl.hpp"
 
-std::string ABI_HLP = 
+std::string ABI_HLP =
     "ARES Monitor ABI Help System\n"
     "----------------------------\n"
     "This system provides information about the ARES Monitor's Application Binary Interface (ABI).\n\n"
@@ -9,5 +9,5 @@ std::string ABI_HLP =
     "2. Data Type Definitions: Standardized definitions for data types used in ARES Monitor interactions.\n"
     "3. Calling Conventions: Guidelines on how functions should be called within the ARES Monitor environment.\n"
     "4. Error Handling: Standard error codes and handling procedures for ABI-related operations.\n\n"
-    "For detailed documentation, please refer to the official ARES Monitor ABI documentation at https://aizawallc.org/APOSI/ARES-Monitor-ABI\n"
+    "For detailed documentation, please refer to the official ARES Monitor ABI documentation at \e]8;;https://softworks.aizawallc.org/APOSI/?Topic=ARES%2FABI%2FReference\e\\APOSI-ABI-Reference\e]8;;\e\\\n"
     "----------------------------\n";

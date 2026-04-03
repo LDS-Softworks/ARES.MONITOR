@@ -13,6 +13,14 @@ Made for the funs and giggles to cause YOU headaches and constant 'No Command Sp
 ### Before Building
 
 *This project requires either macOS or Linux's version of clang++ (LLVM) and MAKE (Both installable either through Xcode or apt/emerge/pacman)*
+> Requirements:General
+>>  make, bash/sh/fish/zsh, g++/c++/clang, cstdio(libc++, glibc++)
+
+> Requirements:Cross-Compiling
+>> macOS -> Linux : zig musl
+homebrew
+>> Linux -> Android : [Android NDK](.NDK/README.md)
+>> Android -x Unsupported as Build Environment, cannot Cross-Compile or Locally-Build (as far as testing has proven.)
 
 ## Compiling
 simply run 
@@ -53,3 +61,5 @@ ARES Expects either:
 ```
 
 so using `ls .` will NOT work, and return an error.
+
+[Usage Documentation](https://softworks.aizawallc.org/APOSI) @ LDS Softworks LLC's WebSite

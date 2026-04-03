@@ -10,3 +10,6 @@ obj/
 .idea/
 *.o
 *.obj
+.NDK/android*
+.NDK/.*
+.NDK/*.zip
