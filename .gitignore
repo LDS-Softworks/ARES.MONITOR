@@ -13,3 +13,7 @@ obj/
 .NDK/android*
 .NDK/.*
 .NDK/*.zip
+MacOS*
+zig-cache*
+zig*
+targets

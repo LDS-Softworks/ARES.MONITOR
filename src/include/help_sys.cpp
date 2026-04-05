@@ -17,7 +17,8 @@ const std::unordered_map<std::string, std::string> HELP_DB = {
     {"\\@CREATE",   "Usage: \\@CREATE [FILE <\"name\"> [WITH <\"content\">] | DIR <\"name\"> | DIR STRUCTURE <\"path\">]"},
     {"\\@DELETE",   "Usage: \\@DELETE [FILE <\"name\"> | DIR [RECURSIVELY] <\"name\"> | FILE WITHEXT <\".ext\">]"},
     {"\\@EXEC",     "Usage: \\@EXEC <\"binary\"> [args...] - Executes an external POSIX binary."},
-    {"\\@AEX",      "Usage: \\@AEX <\"script.ares\"> - Executes an ARES (A)utomation (EX)ecution script with built-in syntax. made for Non-redundant testing."},
+    {"\\@AEX",      "Usage: \\@AEX <\"script.ares\"> <TIMES <n>> - Executes an ARES (A)utomation (EX)ecution script with built-in syntax. made for Non-redundant testing."},
+    {"\\@AEX_TIMES","Executes an automation script a certain number of times (up to around 5 times, this limit can change eventually.)"},
     {"\\@KILL",     "Usage: \\@KILL [PID <id> | <\"name\">] - Forcefully terminates a process."},
     {"\\@ENV",      "Usage: \\@ENV <NAME> <VALUE> - Sets a session environment variable."},
     {"\\@!?",       "Usage: \\@!? - Displays the exit code of the last executed process."},
@@ -38,7 +39,8 @@ const std::unordered_map<std::string, std::string> HELP_DB = {
     {"\\VERSION",      "ARES MONITOR VERSION:" + ARES_VERSION +
                     "\nAnti-POSIX System Interface Version: LDS_APOSI STD0.0.1\n\n"
                     "\tCopyright (c) 2025 Lilly Aizawa and LDS LLC. All rights reserved."},
-        {"\\ABI", ABI_HLP}
+        {"\\ABI", ABI_HLP},
+        {"\\*?", "Usage: \\*? | Returns all the errors of the current session"}
 };
 
 void handle_help(const std::vector<std::string>& args) {

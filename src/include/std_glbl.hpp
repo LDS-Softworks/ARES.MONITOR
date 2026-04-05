@@ -9,10 +9,26 @@
 #include <unistd.h>
 
 #ifndef STD_GLBL_HPP
+#pragma once
 #define STD_GLBL_HPP
 
 // Version information.
 const std::string ARES_VERSION = "0.0.13-alpha";
+
+#include <termios.h>
+
+inline struct termios orig_termios;
+
+inline void enable_raw_mode() {
+    tcgetattr(STDIN_FILENO, &orig_termios);
+    struct termios raw = orig_termios;
+    raw.c_lflag &= ~(ECHO | ICANON); // no echo, read char by char
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
+}
+
+inline void disable_raw_mode() {
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios);
+}
 
 // Help Message Constant, for in case you MESS UP THE SYNTAX.
 // Read the docks ffs.
@@ -20,11 +36,25 @@ const std::string HLPMSG =
     "Available commands:\n"
     "  \\@WRITE <content> [TO <file>]   - Write content to console or file\n"
     "  \\@WRITE FROM <file> [TO <file>] - Read from file and optionally write to another file\n"
-    "  \\@HALT                          - Terminate the session and report errors\n"
+    "  \\@HLT                           - Terminate the session and report errors\n"
     "  @<Binary or Binary Path>         - Executes a system binary using the built-in system shell(POSIX Shell Operand)\n"
     "-- For more information, use \\@HELP ALL --\n"
     ;
     // READ THE DOCKS!!
+
+inline int history_index = -1;
+inline std::vector<std::string> command_history;
+inline void push_history(const std::string& cmd) {
+    if (!cmd.empty()) {
+        command_history.push_back(cmd);
+        history_index = command_history.size(); // reset to end
+    }
+}
+inline std::string get_previous_command() {
+    if (command_history.empty()) return "";
+    if (history_index > 0) history_index--;
+    return command_history[history_index];
+}
 
 // Store variables in memory:
 inline std::unordered_map<std::string, std::string> internal_vars;
@@ -54,9 +84,11 @@ extern void handle_ldc(const std::vector<std::string>& args);
 extern void handle_cwd(const std::vector<std::string>& args);
 extern void handle_delete(const std::vector<std::string>& args);
 extern void handle_create(const std::vector<std::string>& args);
-void execute_Ares_Automation(const std::vector<std::string>& args);
-
+extern void execute_Ares_Automation(const std::vector<std::string>& args);
+extern void getErrors(const std::vector<std::string>& args);
+extern void getVariables(const std::vector<std::string>& args);
 // Duspatcher map, that's it, this has all the commands so DON'T TOUCH IT!.
+#pragma once
 std::unordered_map<std::string, CommandFunc> commands = {
     {"\\@WRITE", handle_write},
     {"\\@HALT", handle_halt},
@@ -72,7 +104,12 @@ std::unordered_map<std::string, CommandFunc> commands = {
     {"\\@HELP", handle_help},
     {"\\@KILALL", handle_kill}, // Mapping to same handler, because i am not rewriting this fucking logic, suck it up. - Lilly Aizawa.
     {"\\@AEX", execute_Ares_Automation},
+    {"\\!?", handle_last_err},
+    {"\\*?", getErrors},
+    {"\\%?", getVariables},
+    // Aliases for stuff we might use a lot.
+    {"\\@%?", getVariables},
+    {"\\@*?", getErrors},
     {"\\@!?", handle_last_err}
 };
-
 #endif

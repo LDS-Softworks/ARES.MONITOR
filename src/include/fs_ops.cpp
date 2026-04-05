@@ -67,8 +67,11 @@ void handle_delete(const std::vector<std::string>& args) {
     }
 }
 
-
-
+static bool path_exists(const std::string &path) {
+    std::ifstream f(path);
+    std::cout << "[DEBUG path_exists] '" << path << "' = " << f.good() << std::endl;
+    return f.good();
+}
 
 // MARK: - Change Directory Logic
 // Logic for \\@CWD <path>

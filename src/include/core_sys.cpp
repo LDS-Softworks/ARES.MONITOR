@@ -1,48 +1,92 @@
 #pragma once
 // Initialize Global Memory Counter
+#include "std_glbl.hpp"
+#include <ostream>
 void init_system() {
-    global_err_ptr = (unsigned long long*)malloc(sizeof(unsigned long long));
-    if (global_err_ptr) *global_err_ptr = 0;
+  for (char **env = environ; *env != nullptr; env++) {
+    std::string entry(*env);
+    size_t pos = entry.find('=');
+    if (pos != std::string::npos) {
+      internal_vars[entry.substr(0, pos)] = entry.substr(pos + 1);
+    }
+  }
+    // Override SHELL after loading environ, and bypass handle_env directly
+    internal_vars["SHELL"] = "ARES " + ARES_VERSION;
+    setenv("SHELL", ("ARES " + ARES_VERSION).c_str(), 1);
+  global_err_ptr = (unsigned long long *)malloc(sizeof(unsigned long long));
+  if (global_err_ptr)
+    *global_err_ptr = 0;
 }
 
 // Logic to check for memory cap
 void check_memory_integrity() {
-    if (*global_err_ptr < MEM_LIMIT) return;
-    
-    std::cerr << "[MEMORYCAP]:[E:MEMORYSAFE_EXIT]" << std::endl;
-    free(global_err_ptr);
-    exit(-1);
+  if (*global_err_ptr < MEM_LIMIT)
+    return;
+
+  std::cerr << "[MEMORYCAP]:[E:MEMORYSAFE_EXIT]" << std::endl;
+  free(global_err_ptr);
+  exit(-1);
 }
 
 // Logic to punish NOPOSIX mistakes
 void handle_syntax_punishment() {
-    noposix_error_counter += 2;
-    *global_err_ptr += 2;
-    
-    check_memory_integrity();
+  noposix_error_counter += 2;
+  *global_err_ptr += 2;
 
-    if (noposix_error_counter < 1024) return;
+  check_memory_integrity();
 
-    std::cerr << "[NOPOSIX]:[UNHANDLEDUSER] - Too many mistakes. Returning to default shell." << std::endl;
-    free(global_err_ptr);
-    
-    // Kick user to default shell (MacOS/Linux)
-    const char* shell = getenv("SHELL");
-    if (!shell) shell = "/bin/sh";
-    execl(shell, shell, NULL);
+  if (noposix_error_counter < 1024)
+    return;
+
+  std::cerr << "[NOPOSIX]:[UNHANDLEDUSER] - Too many mistakes. Returning to "
+               "default shell."
+            << std::endl;
+  free(global_err_ptr);
+
+  // Kick user to default shell (MacOS/Linux)
+  const char *shell = getenv("SHELL");
+  if (!shell)
+    shell = "/bin/sh";
+  execl(shell, shell, NULL);
 }
 
 // Improved Tokenizer to handle quoted strings: "Like This"
-std::vector<std::string> smart_tokenize(const std::string& input) {
+std::vector<std::string> smart_tokenize(const std::string &input) {
     std::vector<std::string> tokens;
     std::string current;
     bool in_quotes = false;
+    char quote_char = 0;
 
-    for (char c : input) {
-        if (c == '\"') {
-            in_quotes = !in_quotes;
-            continue; 
+    for (size_t i = 0; i < input.size(); i++) {
+        char c = input[i];
+
+        // Handle both single and double quotes
+        if ((c == '"' || c == '\'') && !in_quotes) {
+            in_quotes = true;
+            quote_char = c;
+            continue;
         }
+        if (c == quote_char && in_quotes) {
+            in_quotes = false;
+            quote_char = 0;
+            continue;
+        }
+
+        // Escape sequences inside quotes
+        if (in_quotes && c == '\\' && i + 1 < input.size()) {
+            char next = input[i + 1];
+            if (next == '"' || next == '\'' || next == '\\') {
+                current += next;
+                i++;
+                continue;
+            }
+            if (next == 'n') { current += '\n'; i++; continue; }
+            if (next == 't') { current += '\t'; i++; continue; }
+        }
+
+        // Comments — ignore everything after #
+        if (!in_quotes && c == '#' && current.empty()) break;
+
         if (c == ' ' && !in_quotes) {
             if (!current.empty()) tokens.push_back(current);
             current.clear();

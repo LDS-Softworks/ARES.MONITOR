@@ -40,8 +40,9 @@ ANDROID_CXX = $(NDK_HOME)/toolchains/llvm/prebuilt/linux-x86_64/bin/$(NDK_CROSS)
 ## Legacy code stuff that i really don't need to change... yet.
 ZIGCXX      = zig c++
 CXX         = clang++
-ZIGCFLAGS   = -I./src/include -target x86_64-linux-musl
-CFLAGS      = -I./src/include -std=c++17
+INCLUDES 	=  -I./src/include -I./src/include/modules/transcript/
+ZIGCFLAGS_LINUX = -target x86_64-linux-musl
+CFLAGS      = -std=c++17
 SOURCES     := $(wildcard src/*.cpp)
 # --- Output Paths for binaries, only for Linux and MacOS x86_64 ---
 ## even though it can indeed emmit arm64 binaries using clang++ on macOS, if ran on an Apple Silicon Apple Computer.
@@ -82,15 +83,15 @@ $(LINUXCOUT):build
 
 macos: $(SOURCES)
 	@echo "Compiling macOS binary..."
-	@$(CXX) $(CFLAGS) $^ -o $(COUT)
+	@$(CXX) $(CFLAGS) $(INCLUDES) $^ -o $(COUT)
 
 linux-native: $(SOURCES)
 	@echo "Compiling Linux binary..."
-	@$(CXX) $(CFLAGS) $^ -o $(LINUXCOUT)
+	@$(CXX) $(CFLAGS) $(INCLUDES) $^ -o $(LINUXCOUT)
 
 linux-cross: $(SOURCES)
 	@echo "Cross-compiling for Linux via Zig..."
-	@$(ZIGCXX) $(ZIGCFLAGS) $^ -o $(LINUXCOUT)
+	@$(ZIGCXX) $(ZIGCFLAGS_LINUX) $(INCLUDES) $^ -o $(LINUXCOUT)
 
 ## This method, checks for an available NDK, if it exists, it uses the toolchain to cross-compile for Android using Static Linking, if this is NOT found, you get an error code.
 ## Ensure you have an available NDK at the expected location, and that you have the correct permissions to execute the toolchain.
