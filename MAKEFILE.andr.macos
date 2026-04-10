@@ -1,0 +1,20 @@
+# --- Variables ---
+NDK_PATH    = .NDK/android-ndk-r27d
+TOOLCHAIN   = $(NDK_PATH)/toolchains/llvm/prebuilt/darwin-x86_64/bin
+CXX         = $(TOOLCHAIN)/clang++
+
+# Android specific flags (Targeting ARM64, API level 35)
+TARGET_FLAGS = --target=aarch64-linux-android35
+
+INCLUDES    = -I./src/include -I./src/include/modules/transcript/
+CXXFLAGS    = -std=c++17 -O2 -stdlib=libc++ -static-libstdc++
+SOURCES     = src/shell.cpp
+OUTPUT      = bin/ARES.MON.ANDROID_ARM64
+
+# --- Rules ---
+
+all: $(OUTPUT)
+
+$(OUTPUT): $(SOURCES)
+	@mkdir -p bin
+	$(CXX) $(TARGET_FLAGS) $(CXXFLAGS) $(INCLUDES) $(SOURCES) -o $(OUTPUT)

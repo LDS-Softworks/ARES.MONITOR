@@ -41,7 +41,6 @@ ANDROID_CXX = $(NDK_HOME)/toolchains/llvm/prebuilt/linux-x86_64/bin/$(NDK_CROSS)
 ZIGCXX      = zig c++
 CXX         = clang++
 INCLUDES 	=  -I./src/include -I./src/include/modules/transcript/
-ZIGCFLAGS_LINUX = -target x86_64-linux-musl
 CFLAGS      = -std=c++17
 SOURCES     := $(wildcard src/*.cpp)
 # --- Output Paths for binaries, only for Linux and MacOS x86_64 ---
@@ -88,10 +87,10 @@ macos: $(SOURCES)
 linux-native: $(SOURCES)
 	@echo "Compiling Linux binary..."
 	@$(CXX) $(CFLAGS) $(INCLUDES) $^ -o $(LINUXCOUT)
-
+linux: linux-native # Pointer, for people who want to run stuff simple.
 linux-cross: $(SOURCES)
 	@echo "Cross-compiling for Linux via Zig..."
-	@$(ZIGCXX) $(ZIGCFLAGS_LINUX) $(INCLUDES) $^ -o $(LINUXCOUT)
+	@$(MAKE) -f MAKEFILE.linx.macos
 
 ## This method, checks for an available NDK, if it exists, it uses the toolchain to cross-compile for Android using Static Linking, if this is NOT found, you get an error code.
 ## Ensure you have an available NDK at the expected location, and that you have the correct permissions to execute the toolchain.
@@ -99,13 +98,20 @@ linux-cross: $(SOURCES)
 cross-android: $(SOURCES)
 	@echo "Cross-compiling for Android via Android's NDK..."
 	@bash Helpers/check-android-ndk.sh
-	@$(ANDROID_CXX) $(CFLAGS) $^ -stdlib=libc++ -static-libstdc++ -o bin/ARES.MON.ANDROID_ARM64
+	@$(ANDROID_CXX) $(CFLAGS) $(INCLUDES) $^ -stdlib=libc++ -static-libstdc++ -o bin/ARES.MON.ANDROID_ARM64
+
+cross_andr_macos:
+	@$(MAKE) -f "MAKEFILE.andr.macos"
 
 ## Simply a pointer, because, i am NOT making a method to compile this within Termux.
 ## The dependency hell and static-link bs is WAY too much of an annoyance for me to deal or care for.
 ## So, this is someone else's task and problem to figure out HOW to compile within an android device without dealing with the static-dynamic linking issues.
-android: cross-android
-
+android:
+ifeq ($(OS_TYPE),macOS)
+	@$(MAKE) cross_andr_macos
+else
+	@$(MAKE) cross-android
+endif
 # --- Install Rules ---
 # Using a generic install that branches based on detected OS, just in case people wanna actually use ARES more than just for hobby reasons.
 ##

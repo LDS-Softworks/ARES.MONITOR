@@ -29,13 +29,13 @@ const std::unordered_map<std::string, std::string> HELP_DB = {
                     "\t\tAPOSI-EXTERANL: Commands are prefixed with '@' or preceded by '\\@EXEC '\n\n"
                     "Refer to the documentation at \e]8;;https://softworks.aizawallc.org/APOSI/\e\\LDS APOSI Documentation\e]8;;\e\\\n"
                     "for detailed information about this standard.\n"
-                    "\n\n\tCopyright (c) 2025 Lilly Aizawa and LDS LLC. All rights reserved."},
+                    "\n\n\tCopyright (c) 2025 Lilly Aizawa and LDS Softworks LLC. All rights reserved."},
     {"\\ARES",        "ARES Monitor - An purposefully non-POSIX compliant Monitor for macOS and Linux developed by Lilly Aizawa under the LDS LLC brand.\n\n"
                     "Version: 0.0.12-alpha\n"
                     "Ares Monitor implements a VM/Firmware-Like environment with strict command syntax, minimal error handling, external binary execution capabilities and memory safe features to prevent user's abuse.\n\n"
                     "for on-system information about the APOSI standard, run \\@HELP APOSI\nFor cloud information about the APOSI standard, visit \e]8;;https://softworks.aizawallc.org/APOSI/?Topic=Standard%2FAPOSI Standard\e\\LDS APOSI Standard\e]8;;\e\\\n"
                     "For more information about the ARES Monitor software, visit \e]8;;https://softworks.aizawallc.org/APOSI/?Topic=ARES%2FARES Quickstart\e\\APOSI:ARES Monitor Quick-Start Information\e]8;;\e\\\n"
-                    "\n\n\tCopyright (c) 2025 Lilly Aizawa and LDS LLC. All rights reserved."},
+                    "\n\n\tCopyright (c) 2025 Lilly Aizawa and LDS Softworks LLC. All rights reserved."},
     {"\\VERSION",      "ARES MONITOR VERSION:" + ARES_VERSION +
                     "\nAnti-POSIX System Interface Version: LDS_APOSI STD0.0.1\n\n"
                     "\tCopyright (c) 2025 Lilly Aizawa and LDS LLC. All rights reserved."},

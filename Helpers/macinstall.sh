@@ -26,7 +26,7 @@ if [ ! -d "$INSTALL_DIR" ]; then
 fi
 
 echo "Installing $SOURCE_BIN to $INSTALL_DIR..."
-cp "$SOURCE_BIN" "$INSTALL_DIR/ares-mon"
+sudo cp "$SOURCE_BIN" "$INSTALL_DIR/ares-mon"
 sudo chmod +x "$INSTALL_DIR/ares-mon"
 
 echo "Installation complete."

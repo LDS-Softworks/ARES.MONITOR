@@ -1,0 +1,12 @@
+ZIGCXX          = zig c++
+ZIGCFLAGS_LINUX = -target x86_64-linux-musl
+SOURCES         = src/shell.cpp
+INCLUDES 	=  -I./src/include -I./src/include/modules/transcript/
+OUTPUT   = bin/ARES.MON.LINUX_x64
+
+.PHONY: all
+
+$(OUTPUT): $(SOURCES)
+	@$(ZIGCXX) $(ZIGCFLAGS_LINUX) $(INCLUDES) $^ -o $(OUTPUT)
+
+all: $(OUTPUT)
