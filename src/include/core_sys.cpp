@@ -2,14 +2,22 @@
 // Initialize Global Memory Counter
 #include "std_glbl.hpp"
 #include <ostream>
+#ifdef __APPLE__
+    #include <crt_externs.h>
+    #define environ (*_NSGetEnviron())
+#elif defined(__linux__) || defined(__ANDROID__)
+    extern char **environ;
+#endif
+
 void init_system() {
-  for (char **env = environ; *env != nullptr; env++) {
+for (char **env = environ; *env != nullptr; env++) {
     std::string entry(*env);
     size_t pos = entry.find('=');
     if (pos != std::string::npos) {
-      internal_vars[entry.substr(0, pos)] = entry.substr(pos + 1);
+        internal_vars[entry.substr(0, pos)] = entry.substr(pos + 1);
     }
-  }
+}
+
     // Override SHELL after loading environ, and bypass handle_env directly
     internal_vars["SHELL"] = "ARES " + ARES_VERSION;
     setenv("SHELL", ("ARES " + ARES_VERSION).c_str(), 1);
