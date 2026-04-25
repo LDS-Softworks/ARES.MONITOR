@@ -1,4 +1,5 @@
 #pragma once
+#include <ostream>
 #include <stdlib.h>
 #include <iostream>
 #include <string>
@@ -87,6 +88,9 @@ extern void handle_create(const std::vector<std::string>& args);
 extern void execute_Ares_Automation(const std::vector<std::string>& args);
 extern void getErrors(const std::vector<std::string>& args);
 extern void getVariables(const std::vector<std::string>& args);
+void clearTerminalContents(const std::vector<std::string>& args){
+    std::cout << "\033[2J\033[H" << std::endl;
+}
 // Duspatcher map, that's it, this has all the commands so DON'T TOUCH IT!.
 #pragma once
 std::unordered_map<std::string, CommandFunc> commands = {
@@ -104,6 +108,7 @@ std::unordered_map<std::string, CommandFunc> commands = {
     {"\\@HELP", handle_help},
     {"\\@KILALL", handle_kill}, // Mapping to same handler, because i am not rewriting this fucking logic, suck it up. - Lilly Aizawa.
     {"\\@AEX", execute_Ares_Automation},
+    {"\\@CTC", clearTerminalContents},
     {"\\!?", handle_last_err},
     {"\\*?", getErrors},
     {"\\%?", getVariables},

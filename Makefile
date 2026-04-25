@@ -40,15 +40,16 @@ ANDROID_CXX = $(NDK_HOME)/toolchains/llvm/prebuilt/linux-x86_64/bin/$(NDK_CROSS)
 ## Legacy code stuff that i really don't need to change... yet.
 ZIGCXX      = zig c++
 CXX         = clang++
-INCLUDES 	=  -I./src/include -I./src/include/modules/transcript/
+INCLUDES 	=  -I./src/include -I./src/include/* -I./src/include/modules/transcript/
 ZIGCFLAGS_LINUX = -target x86_64-linux-musl
 CFLAGS      = -std=c++17
 SOURCES     := $(wildcard src/*.cpp)
 # --- Output Paths for binaries, only for Linux and MacOS x86_64 ---
 ## even though it can indeed emmit arm64 binaries using clang++ on macOS, if ran on an Apple Silicon Apple Computer.
 
-LINUXCOUT   = bin/ARES.MON.LINUX_x64 # Linux Output
-COUT        = bin/ARES.MON.MACOS_x64 # macOS X86_64 output(arm64 output if applicable.)
+LINUXCOUT    = bin/ARES.MON.LINUX_x64 # Linux Output
+ANDRCOUT	 = bin/ARES.MON.ANDROID_ARM64
+COUT         = bin/ARES.MON.MACOS_x64 # macOS X86_64 output(arm64 output if applicable.)
 
 # --- Build Targets ---
 all: build
@@ -99,7 +100,7 @@ linux-cross: $(SOURCES)
 cross-android: $(SOURCES)
 	@echo "Cross-compiling for Android via Android's NDK..."
 	@bash Helpers/check-android-ndk.sh
-	@$(ANDROID_CXX) $(CFLAGS) $^ -stdlib=libc++ -static-libstdc++ -o bin/ARES.MON.ANDROID_ARM64
+	@$(ANDROID_CXX) $(CFLAGS) $(INCLUDES) $^ -stdlib=libc++ -static-libstdc++ -o $(ANDRCOUT)
 
 ## Simply a pointer, because, i am NOT making a method to compile this within Termux.
 ## The dependency hell and static-link bs is WAY too much of an annoyance for me to deal or care for.
