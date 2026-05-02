@@ -1,6 +1,9 @@
 // Include for ALL definitions that are NOT inside the int main() context.
 // The reason this exist? to shut up the warning about #pragma once.
-#include "../shell.hpp"
+#include "shell.hpp"
+void clearTerminalContents(const std::vector<std::string>& args){
+    printf ("\033[2J\033[3J\033[H");
+}
 
 // ovbious main entry point. we might or might not need this... just saying, i
 // is very self-explanatory.
@@ -10,7 +13,6 @@ int main() {
   std::string line;
   bool condition_active = false; // are we inside an #IF block
   bool condition_met = false;    // did the condition pass
-
   while (true) {
     std::cout << "ARES &> ";
     if (!std::getline(std::cin, line))

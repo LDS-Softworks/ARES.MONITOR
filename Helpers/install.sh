@@ -106,8 +106,8 @@ if [[ $(uname) == "Linux" ]]; then
             shift
             ;;
         --privileged)
-            echo "Privileged Install selected. Defaulting to /usr/local/bin. This may require sudo privileges and is not recommended for general users."
-            INSTALL_DIR="/usr/local/bin"
+            echo "Privileged Install selected. Defaulting to /usr/bin. This may require sudo privileges and is not recommended for general users."
+            INSTALL_DIR="/usr/bin"
             installPrivileged
             shift
         ;;
