@@ -1,4 +1,4 @@
-AVER "0.0.12-alpha"
+AVER "0.0.13-alpha"
 AMEM 512
 
 \@WRITE "Ahead, we will format a JSON File using a TXT file with our arescript formatter."
@@ -15,5 +15,14 @@ AMEM 512
 \#ELSE
     \@WRITE FROM "inputdata.txt" WITH "toml.arescript" TO output.toml
     \@WRITE FROM output.toml
+\#BLOCK longContent LINES 5
+This
+Is
+Some
+Pretty
+Long content
+\#BLOCKEND
+\@WRITE "Here it is some %longContent"
+\@WRITE "That was some pretty long content, huh?"
 \@WRITE "Thanks for using ARES Scripting, Bye."
 AEND

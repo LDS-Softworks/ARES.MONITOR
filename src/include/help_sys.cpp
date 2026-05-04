@@ -12,6 +12,7 @@
 const std::unordered_map<std::string, std::string> HELP_DB = {
     {"\\@WRITE", "Usage: \\@WRITE <\"text\"> [TO <\"file\">] or FROM "
                  "<\"file\"> [TO <\"file\">]"},
+    {"\\@APPEND", "Usage: \\@APPEND <\"text\"> TO <\"file\"> or FROM <%VAR>|<\"file\"> TO <\"file\"> - Appends content to an existing file."},
     {"\\@HLT",
      "Usage: \\@HLT - Terminates session and prints the session error log."},
     {"\\@CWD", "Usage: \\@CWD <\"path\"> - Changes current working directory "

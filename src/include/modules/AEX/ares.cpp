@@ -6,9 +6,9 @@
 #include <string>
 #include <vector>
 #pragma once
-std::string parserV = "0.0.12-alpha";
+std::string parserV = "0.0.13-alpha";
 #pragma once
-std::string parser_rev = "2026-04-04";
+std::string parser_rev = "2026-05-04";
 
 // External tokenizer
 extern std::vector<std::string> smart_tokenize(const std::string &input);
@@ -196,6 +196,7 @@ void execute_Ares_Automation(const std::vector<std::string> &args) {
       }
 
       // ---- \#IF ----
+      // Changes: Removed debug lines on if-else blocks checks. if you need them, simply add a output that references these vars yourself, sorry.
       if (cmd == "\\#IF") {
         if (tokens.size() < 3) {
           session_errors.push_back(
@@ -272,6 +273,74 @@ void execute_Ares_Automation(const std::vector<std::string> &args) {
         update_flags();
         continue;
       }
+
+      // ---- \#BLOCK <VARNAME> LINES n ----
+      // This, makes so we can define long content blocks before writing/appending to a file or output.
+      // Kinda useful for long scripts.
+      if (cmd == "\\#BLOCK") {
+        // Expected: \#BLOCK <VARNAME> LINES <n>
+        if (tokens.size() < 4 || tokens[2] != "LINES") {
+          session_errors.push_back(
+              "[ARES-AEX]:[INVALID_BLOCK] Usage: \\#BLOCK <VARNAME> LINES <n>");
+          last_error_code = 1;
+          update_flags();
+          continue;
+        }
+        std::string block_var = tokens[1];
+        int line_count = 0;
+        try {
+          line_count = std::stoi(tokens[3]);
+        } catch (...) {
+          session_errors.push_back(
+              "[ARES-AEX]:[INVALID_BLOCK] LINES value must be an integer");
+          last_error_code = 1;
+          update_flags();
+          continue;
+        }
+        if (line_count < 1) {
+          session_errors.push_back(
+              "[ARES-AEX]:[INVALID_BLOCK] LINES must be >= 1");
+          last_error_code = 1;
+          update_flags();
+          continue;
+        }
+        std::string block_content;
+        int collected = 0;
+        ++i; // move past \#BLOCK line
+        while (i < lines.size() && collected < line_count) {
+          block_content += lines[i] + "\n";
+          ++i;
+          ++collected;
+        }
+        // expect \#BLOCKEND
+        if (i < lines.size()) {
+          auto bend_tokens = smart_tokenize(lines[i]);
+          if (bend_tokens.empty() || bend_tokens[0] != "\\#BLOCKEND") {
+            session_errors.push_back(
+                "[ARES-AEX]:[INVALID_BLOCK] Expected \\#BLOCKEND after " +
+                std::to_string(line_count) + " lines for block '" + block_var + "'");
+            last_error_code = 1;
+            update_flags();
+            continue;
+          }
+          // consume \#BLOCKEND
+        } else {
+          session_errors.push_back(
+              "[ARES-AEX]:[INVALID_BLOCK] Reached AEND without \\#BLOCKEND for block '" + block_var + "'");
+          last_error_code = 1;
+          update_flags();
+          continue;
+        }
+        // store into internal_vars under the given name
+        internal_vars[block_var] = block_content;
+        last_error_code = 0;
+        update_flags();
+        continue;
+      }
+
+      // ---- \#BLOCKEND (standalone, outside \#BLOCK context) ----
+      if (cmd == "\\#BLOCKEND")
+        continue;
 
       // ---- Normal command dispatch ----
       dispatch_line(tokens);

@@ -11,8 +11,8 @@ void init_system() {
     }
   }
     // Override SHELL after loading environ, and bypass handle_env directly
-    internal_vars["SHELL"] = "ARES " + ARES_VERSION;
-    setenv("SHELL", ("ARES " + ARES_VERSION).c_str(), 1);
+    internal_vars["ARES_VERSION"] = "ARES " + ARES_VERSION;
+    setenv("SHELL", "/usr/bin/ares", 1);
   global_err_ptr = (unsigned long long *)malloc(sizeof(unsigned long long));
   if (global_err_ptr)
     *global_err_ptr = 0;

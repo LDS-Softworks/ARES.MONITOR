@@ -60,6 +60,12 @@ ARES Expects either:
 [varname] [value]
 ```
 
-so using `ls .` will NOT work, and return an error.
+so using `ls .` will NOT work, and will just set a variable :v
 
 [Usage Documentation](https://softworks.aizawallc.org/APOSI) @ LDS Softworks LLC's WebSite
+
+## 0.0.13-Alpha Additions:
+- `\@APPEND` : Append stuff to a file, either using variables or plaintext content.
+- `\@AEX` Additions : IF-ELSE-ELIF blocks, `\#BLOCK` & `\#BLOCKEND` for LongForm File Additions(using APPEND or WRITE.), New AEX Version (you might wanna update your scripts :3)
+
+**And so much more!**

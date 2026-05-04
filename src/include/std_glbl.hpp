@@ -89,10 +89,15 @@ extern void execute_Ares_Automation(const std::vector<std::string>& args);
 extern void getErrors(const std::vector<std::string>& args);
 extern void getVariables(const std::vector<std::string>& args);
 extern void clearTerminalContents(const std::vector<std::string>&args);
+
+// Extern for appending to file.
+extern void handle_append(const std::vector<std::string>& args);
+
 // Duspatcher map, that's it, this has all the commands so DON'T TOUCH IT!.
 #pragma once
 std::unordered_map<std::string, CommandFunc> commands = {
     {"\\@WRITE", handle_write},
+    {"\\@APPEND", handle_append},
     {"\\@HALT", handle_halt},
     {"\\@HLT", handle_halt},
     {"\\@EXEC", handle_exec},
