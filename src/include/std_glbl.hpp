@@ -106,6 +106,8 @@ namespace ARES{
             inline std::unordered_map<std::string, std::string> internal_vars;
             extern void handle_env(const std::vector<std::string> &args);
             extern void getVariables(const std::vector<std::string> &args);
+
+            extern void handle_cel(const std::vector<std::string> &args);
         }
         namespace EXTERNALS {
             extern void handle_exec(const std::vector<std::string> &args);
@@ -120,7 +122,7 @@ namespace ARES{
         extern void handle_halt(const std::vector<std::string> &args);
 
         namespace HELP {
-            // Help Message Constant, for in case you MESS UP THE SYNTAX.
+// Help Message Constant, for in case you MESS UP THE SYNTAX.
 // Read the docks ffs.
 const std::string HLPMSG =
     "Available commands:\n"
@@ -129,7 +131,12 @@ const std::string HLPMSG =
     "to another file\n"
     "  \\@HLT                           - Terminate the session and report "
     "errors\n"
-    "  @<Binary or Binary Path>         - Executes a system binary using the "
+    "  @<Binary or Binary Path>         - Executes a system binary using the ARES runtime.\n"
+    "  \\*?                             - Display session errors log\n"
+    "  \\!?                             - Display last error code from an ARES operand. (limited)\n"
+    "  \\%? [PRETTY]                    - Display environment variables, with optional pretty print or display specific env values.\n"
+    "  @/path/to/ares \\C \"<cmd>\"     - Runs ARES in One-Shot mode (escaping can change depending on Terminal Emulator.\n"
+    "  \\QUIET                          - Supresses this message on load.\n"
     "built-in system shell(POSIX Shell Operand)\n"
     "-- For more information, use \\@HELP ALL --\n";
 // READ THE DOCS!!
@@ -146,12 +153,12 @@ std::unordered_map<std::string, CommandFunc> commands = {
     {"\\@WRITE", ARES::IO::FileOperations::handle_write},
     {"\\@APPEND", ARES::IO::FileOperations::handle_append},
     {"\\@HALT",
-     ARES::CORE::
-         handle_halt}, // Explcit namespace scoping to avoid ambiguity. since
-                       // this is defined IN the core Namespace, we must specify
-                       // it. If you want HLT to do something else, scope to
-                       // your NS::SNS::handler(const std::vector<std::string>
-                       // &args) and change the mapping here.
+     ARES::CORE::handle_halt},
+                        // Explcit namespace scoping to avoid ambiguity. since
+                        // this is defined IN the core Namespace, we must specify
+                        // it. If you want HLT to do something else, scope to
+                        // your NS::SNS::handler(const std::vector<std::string>
+                        // &args) and change the mapping here.
     {"\\@HLT", ARES::CORE::handle_halt},
     {"\\@EXEC", ARES::RTE::EXTERNALS::handle_exec},
     {"\\@CREATE", ARES::IO::FileOperations::handle_create},
@@ -173,7 +180,11 @@ std::unordered_map<std::string, CommandFunc> commands = {
     // Aliases for stuff we might use a lot.
     {"\\@%?", ARES::RTE::ENV::getVariables},
     {"\\@*?", ARES::RTE::ENV::getErrors},
-    {"\\@!?", ARES::RTE::ENV::handle_last_err}
+    {"\\@!?", ARES::RTE::ENV::handle_last_err},
+    // CEL is for "Clear Errors Log". very self explanatory.
+    // This command clears all previous errors from the session errors log. so you don't end up with 4GB of Errors in your memory if you keep fucking up and not reading the damn docs.
+    // READ THE DOCS!!. -- Liliana Aizawa @ LDS Softworks LLC.
+    {"\\@CEL", ARES::RTE::ENV::handle_cel}
     };
     }
 } // namespace ARES

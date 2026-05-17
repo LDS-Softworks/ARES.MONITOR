@@ -5,12 +5,12 @@ AEX Is the scripting engine/language of ARES, providing Type-Explicit and verbos
 ## Operands
 AEX Provides SEVERAL "Operands" from the GCOO Type such as:
 
-- COMM : \@COMM Provides a method to comment(hence its name) blocks for your own understanding.
+- `\@COMM` : \@COMM Provides a method to comment(hence its name) blocks for your own understanding.
     COMM Syntax is as follows:
 ```ares script
     \@COMM Comment contents go here, these are automatically ignored by AEX on runtime.
 ```
-- \#IF <file/var> !|= <0|1> : the \#IF Statement allows you to  build conditional loops and compare values to ensure proper execution flow instead of linear.
+- `\#IF <file/var> !|= <0|1>` : the \#IF Statement allows you to  build conditional loops and compare values to ensure proper execution flow instead of linear.
     IF Statements read as follows:
 ```ares script
     \@COMM If a file does not exist
@@ -21,19 +21,19 @@ AEX Provides SEVERAL "Operands" from the GCOO Type such as:
 ```
 > Alternatively, ELIF blocks are provided, these do the same as IF blocks, though it is recommended to use them within a chained check to avoid confusion.
 
-- \#REPORT : REPORT is the way one can output errors on a session to avoid letting the user see nothing while your script runs.
+- `\#REPORT` : REPORT is the way one can output errors on a session to avoid letting the user see nothing while your script runs.
         A REPORT call will return the errors on the current session, thus it is recommended its use when doing sensitive operations.
         REPORT's syntax is as follows:
 ```ares script
         \@COMM Report all current errors.
         \#REPORT
 ```
-- \#INTO : With INTO, you can put commands(AEX) INSIDE of a file(though this require a ONE-Liner if not using \#BLOCK.)
+- `\#INTO` : With INTO, you can put commands(AEX) INSIDE of a file(though this require a ONE-Liner if not using \#BLOCK.)
 ```ares script
     \#INTO's Syntax reads as follows.
     \#INTO "something.ares" PUT "\@WRITE 'Something Cool from %SHELL '"
 ```
-- \#BLOCK : BLOCK is a way to define LONG Block successions, this allows you to properly bring longform content(such as scripts, data types, HTML Files, Bash additions, etc) to ARES, allowing you to define longform content(and its reference environment variable) before writing.
+- `\#BLOCK` : BLOCK is a way to define LONG Block successions, this allows you to properly bring longform content(such as scripts, data types, HTML Files, Bash additions, etc) to ARES, allowing you to define longform content(and its reference environment variable) before writing.
 ```ares script
     \#BLOCK's symtax reads as follows
     \#BLOCK coolName LINES 4
@@ -45,7 +45,7 @@ AEX Provides SEVERAL "Operands" from the GCOO Type such as:
 ```
 > Note, if BLOCKEND is missing, the setting of this content will fail, and anything using it will fail.
 
-- RET : RET is still in development for its use in FUNCTIONS(\#DEF FUNCTION FUNCTIONNAME [argumentType argumentPointer]{body \@RET})
+- `\@a  RET` : RET is still in development for its use in FUNCTIONS(\#DEF FUNCTION FUNCTIONNAME [argumentType argumentPointer]{body \@RET})
 
 ## AMEM, AVER, AEND?
 AVER as well as its sister Descriptors AMEM and AEND are `Operation Descriptors`.

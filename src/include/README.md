@@ -9,3 +9,10 @@ i also know these use a lot of `#pragma once` statements, but that's to ensure s
 there's some issues, I KNOW. i am gonna fix them, someday.
 
 a lot of stuff(individual functionality) is split into individual files, that's stuff like [\@HALT](hlt.cpp), [\@WRITE](write.cpp), [\@EXEC](runexternals.cpp) and so on so forth, that's because, they might break eventually, and i prefer this to be easily traceable than a monolith hell.
+
+## 0.0.14 Alpha R1 Notes:
+
+Be happy, after 0.0.14 R1, Functions and methods are properly namespaced and isolated.
+
+Code's still a mess. i am doing what i can.
+> - Liliana Aizawa @ LDS Softworks LLC

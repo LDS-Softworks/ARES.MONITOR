@@ -87,13 +87,15 @@ namespace ARES::CORE::HELP {
     {"\\C", "Shell Modifier || Usage: @/path/to/ares \\C <ARES_CMD> - Executes "
             "a string of ARES commands directly from the shell without "
             "entering Interactive Mode."
-            "\n\nThis can be used for Quick Testing, Scripting, or One-Off "
+            "\n\n\tThis can be used for Quick Testing, Scripting, or One-Off "
             "commands without the need of a full Interactive Session."},
     {"\\QUIET",
      "Shell Modifier || Usage: @/path/to/ares \\QUIET - Suppresses the initial "
      "help message when launching the ARES Monitor from the shell. This allows "
      "for a cleaner startup when the user is already familiar with the "
-     "available commands or when the help message is not needed."}};
+     "available commands or when the help message is not needed."},
+      {"\\@CEL", "Usage: \\@CEL | Clears the session error log"}
+    };
 
 void handle_help(const std::vector<std::string> &args) {
   // Case 1: @HELP ALL

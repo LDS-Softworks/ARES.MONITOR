@@ -7,7 +7,7 @@
 #include <vector>
 
 namespace ARES {
-// External tokenizer from core_sys
+// External tokenizer from core_sys, we reuse this one a LOT.
     extern std::vector<std::string> ARES::MODULES::AEX::smart_tokenize(const std::string &input);
 
     namespace MODULES::ARESCRIPT {
@@ -15,7 +15,12 @@ namespace ARES {
         std::string pattern;
         std::string replacement;
     };
-
+    /**
+     * @brief absolutely massive function that applies the ARESCRIPT Formatting Rules using an .arescript rulebook specified.
+     * This is mostly used by `\@WRITE` when using the "WITH" argument.
+     *
+     * I did this at the begining of 2026, and i cannot read it anymore, so... can't really explain how it works. it just does.
+     */
     std::string apply_arescript(std::string data, const std::string &script_path)
         {
 
@@ -32,7 +37,7 @@ namespace ARES {
                 *global_err_ptr += 1;
                 return data;
             }
-        
+
             // ==============================
             // Phase 1: Script State
             // ==============================
