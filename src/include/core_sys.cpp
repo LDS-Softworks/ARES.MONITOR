@@ -2,24 +2,36 @@
 // Initialize Global Memory Counter
 #include "std_glbl.hpp"
 #include <ostream>
-void init_system() {
+#include "get_self_path.cpp"
+namespace ARES {
+namespace CORE {
+  /**
+   * @brief Initializes the system by loading environment variables and setting up global state.
+   * This function should be called at the very start of the program to ensure that all necessary
+   * environment variables are loaded and the global error pointer is initialized.
+   * It also sets the SHELL environment variable to the path of the current executable.
+   * This is crucial for the correct functioning of the shell and its built-in commands.
+   */
+void init_system()
+{
   for (char **env = environ; *env != nullptr; env++) {
     std::string entry(*env);
     size_t pos = entry.find('=');
     if (pos != std::string::npos) {
-      internal_vars[entry.substr(0, pos)] = entry.substr(pos + 1);
+      ARES::RTE::ENV::internal_vars[entry.substr(0, pos)] = entry.substr(pos + 1);
     }
   }
     // Override SHELL after loading environ, and bypass handle_env directly
-    internal_vars["ARES_VERSION"] = "ARES " + ARES_VERSION;
-    setenv("SHELL", "/usr/bin/ares", 1);
+    ARES::RTE::ENV::internal_vars["ARES_VERSION"] = "ARES " + ARES_VERSION + " " + BRANCH;
+    ARES::RTE::ENV::internal_vars["ARES_RELEASE"] = RELEASE_DATE + " - " +ARES_RELEASE;
+    setenv("SHELL", ARES::CORE::UTILS::get_self_path().c_str(), 1);
   global_err_ptr = (unsigned long long *)malloc(sizeof(unsigned long long));
   if (global_err_ptr)
     *global_err_ptr = 0;
 }
-
 // Logic to check for memory cap
-void check_memory_integrity() {
+void check_memory_integrity()
+{
   if (*global_err_ptr < MEM_LIMIT)
     return;
 
@@ -29,11 +41,12 @@ void check_memory_integrity() {
 }
 
 // Logic to punish NOPOSIX mistakes
-void handle_syntax_punishment() {
+void handle_syntax_punishment()
+{
   noposix_error_counter += 2;
   *global_err_ptr += 2;
 
-  check_memory_integrity();
+  ARES::CORE::check_memory_integrity();
 
   if (noposix_error_counter < 1024)
     return;
@@ -49,9 +62,13 @@ void handle_syntax_punishment() {
     shell = "/bin/sh";
   execl(shell, shell, NULL);
 }
+} // namespace CORE
 
+
+namespace MODULES::AEX {
 // Improved Tokenizer to handle quoted strings: "Like This"
-std::vector<std::string> smart_tokenize(const std::string &input) {
+std::vector<std::string> smart_tokenize(const std::string &input)
+{
     std::vector<std::string> tokens;
     std::string current;
     bool in_quotes = false;
@@ -96,4 +113,6 @@ std::vector<std::string> smart_tokenize(const std::string &input) {
     }
     if (!current.empty()) tokens.push_back(current);
     return tokens;
+}
+}
 }

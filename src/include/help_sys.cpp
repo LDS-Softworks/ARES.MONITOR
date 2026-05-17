@@ -8,11 +8,15 @@
 #pragma once
 #include "ABI_HLP.cpp"
 
+// NAMESPACE: ARES -> CORE -> HELP : Help system for ARES Monitor.
+namespace ARES::CORE::HELP {
 // Database of Anti-POSIX commands
-const std::unordered_map<std::string, std::string> HELP_DB = {
+  const std::unordered_map<std::string, std::string> HELP_DB = {
     {"\\@WRITE", "Usage: \\@WRITE <\"text\"> [TO <\"file\">] or FROM "
                  "<\"file\"> [TO <\"file\">]"},
-    {"\\@APPEND", "Usage: \\@APPEND <\"text\"> TO <\"file\"> or FROM <%VAR>|<\"file\"> TO <\"file\"> - Appends content to an existing file."},
+    {"\\@APPEND",
+     "Usage: \\@APPEND <\"text\"> TO <\"file\"> or FROM <%VAR>|<\"file\"> TO "
+     "<\"file\"> - Appends content to an existing file."},
     {"\\@HLT",
      "Usage: \\@HLT - Terminates session and prints the session error log."},
     {"\\@CWD", "Usage: \\@CWD <\"path\"> - Changes current working directory "
@@ -48,7 +52,7 @@ const std::unordered_map<std::string, std::string> HELP_DB = {
              "variables or the contents of an existing given variable"},
     {"\\@CTC", "Usage \\@CTC    | Clears the terminal's contents"},
     {"\\VERSION",
-     "ARES MONITOR VERSION:" + ARES_VERSION +
+     "ARES MONITOR VERSION:" + ARES_VERSION + "\nRelease:" + ARES_RELEASE +
          "\nAnti-POSIX System Interface Version: LDS_APOSI STD0.0.1\n\n"
          "\tCopyright (c) 2025 Lilly Aizawa and LDS LLC. All rights reserved."},
     {"\\APOSI",
@@ -66,7 +70,7 @@ const std::unordered_map<std::string, std::string> HELP_DB = {
      "ARES Monitor - An purposefully non-POSIX compliant Monitor for macOS and "
      "Linux developed by Lilly Aizawa under the LDS Softworks LLC brand.\n\n"
      "Version: " +
-         ARES_VERSION +
+         ARES_VERSION + "-" + ARES_RELEASE +
          "\n"
          "Ares Monitor implements a VM/Firmware-Like environment with strict "
          "command syntax, minimal error handling, external binary execution "
@@ -79,14 +83,24 @@ const std::unordered_map<std::string, std::string> HELP_DB = {
          "\e]8;;https://softworks.aizawallc.org/APOSI/?Topic=ARES%2FARES "
          "Quickstart\e\\APOSI:ARES Monitor Quick-Start Information\e]8;;\e\\\n"
          "\n\n\tCopyright (c) 2025 Lilly Aizawa and LDS Softworks LLC. All "
-         "rights reserved."}};
+         "rights reserved."},
+    {"\\C", "Shell Modifier || Usage: @/path/to/ares \\C <ARES_CMD> - Executes "
+            "a string of ARES commands directly from the shell without "
+            "entering Interactive Mode."
+            "\n\nThis can be used for Quick Testing, Scripting, or One-Off "
+            "commands without the need of a full Interactive Session."},
+    {"\\QUIET",
+     "Shell Modifier || Usage: @/path/to/ares \\QUIET - Suppresses the initial "
+     "help message when launching the ARES Monitor from the shell. This allows "
+     "for a cleaner startup when the user is already familiar with the "
+     "available commands or when the help message is not needed."}};
 
 void handle_help(const std::vector<std::string> &args) {
   // Case 1: @HELP ALL
   if (args.size() > 1 && args[1] == "ALL") {
     std::cout
         << "\n--- [Anti-POSIX System Interface(APOSI) COMMAND REFERENCE] ---\n";
-    for (const auto &[cmd, desc] : HELP_DB) {
+    for (const auto &[cmd, desc] : ARES::CORE::HELP::HELP_DB) {
       std::cout << std::left << std::setw(12) << cmd << " | " << desc << "\n";
     }
     std::cout
@@ -97,8 +111,8 @@ void handle_help(const std::vector<std::string> &args) {
 
   // Case 2: @HELP <CMD>
   if (args.size() > 1) {
-    if (HELP_DB.count(args[1])) {
-      std::cout << args[1] << " : " << HELP_DB.at(args[1]) << std::endl;
+    if (ARES::CORE::HELP::HELP_DB.count(args[1])) {
+      std::cout << args[1] << " : " << ARES::CORE::HELP::HELP_DB.at(args[1]) << std::endl;
     } else {
       std::cout << "[HELP]:[4083]:[UNKNOWN_COMMAND_HELP] " << args[1]
                 << std::endl;
@@ -110,3 +124,4 @@ void handle_help(const std::vector<std::string> &args) {
   std::cout << "Usage: \\@HELP [ALL | <COMMAND_NAME>]\nExample: \\@HELP \\@AEX"
             << std::endl;
 }
+} // namespace ARES::CORE::HELP

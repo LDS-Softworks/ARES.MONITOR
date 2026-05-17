@@ -1,3 +1,5 @@
+
+namespace ARES {
 #pragma once
 #include "std_glbl.hpp"
 #include <fstream>
@@ -5,15 +7,21 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#pragma once
-std::string parserV = "0.0.13-alpha";
-#pragma once
-std::string parser_rev = "2026-05-04";
+  namespace RTE::EXTERNALS {
+      extern void run_external(const std::string &cmd, const std::vector<std::string> &args);
+    }
+namespace MODULES {
+namespace AEX {
+
+  std::string parserV = "0.0.13-alpha";
+  std::string parser_rev = "2026-05-04";
 
 // External tokenizer
-extern std::vector<std::string> smart_tokenize(const std::string &input);
-extern void run_external(const std::string &cmd,
-                         const std::vector<std::string> &args);
+    extern std::vector<std::string> smart_tokenize(const std::string &input);
+    namespace RTE::EXTERNALS
+    {
+      extern void run_external(const std::string &cmd,const std::vector<std::string> &args);
+    }
 
 int CarryFlag = 0;
 int ZeroFlag = 0;
@@ -44,7 +52,7 @@ static bool evaluate_condition(const std::string &token) {
     return ZeroFlag != 0;
   if (token == ".CF")
     return CarryFlag != 0;
-  return path_exists(token);
+  return IO::FileOperations::path_exists(token);
 }
 
 // Dispatch a tokenized line through the commands map
@@ -52,17 +60,17 @@ static void dispatch_line(const std::vector<std::string> &tokens) {
   if (tokens.empty())
     return;
 
-  auto it = commands.find(tokens[0]);
-  if (it != commands.end()) {
+  auto it = CORE::commands.find(tokens[0]);
+  if (it != CORE::commands.end()) {
     it->second(tokens);
-    update_flags();
+    MODULES::AEX::update_flags();
   } else if (!tokens[0].empty() && tokens[0][0] == '@') {
-    run_external(tokens[0].substr(1), {tokens.begin() + 1, tokens.end()});
-    update_flags();
+    ARES::RTE::EXTERNALS::run_external(tokens[0].substr(1), {tokens.begin() + 1, tokens.end()});
+    MODULES::AEX::update_flags();
   } else {
     session_errors.push_back("[ARES-AEX]:[UNKNOWN_COMMAND] " + tokens[0]);
     last_error_code = 1;
-    update_flags();
+    MODULES::AEX::update_flags();
   }
 }
 
@@ -332,7 +340,7 @@ void execute_Ares_Automation(const std::vector<std::string> &args) {
           continue;
         }
         // store into internal_vars under the given name
-        internal_vars[block_var] = block_content;
+        ARES::RTE::ENV::internal_vars[block_var] = block_content;
         last_error_code = 0;
         update_flags();
         continue;
@@ -350,3 +358,6 @@ void execute_Ares_Automation(const std::vector<std::string> &args) {
   last_error_code = 0;
   update_flags();
 }
+}
+}
+} // namespace ARES

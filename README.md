@@ -65,7 +65,18 @@ so using `ls .` will NOT work, and will just set a variable :v
 [Usage Documentation](https://softworks.aizawallc.org/APOSI) @ LDS Softworks LLC's WebSite
 
 ## 0.0.13-Alpha Additions:
-- `\@APPEND` : Append stuff to a file, either using variables or plaintext content.
-- `\@AEX` Additions : IF-ELSE-ELIF blocks, `\#BLOCK` & `\#BLOCKEND` for LongForm File Additions(using APPEND or WRITE.), New AEX Version (you might wanna update your scripts :3)
+- [`\@APPEND`](src/include/write.cpp#L102-161) : Append stuff to a file, either using variables or plaintext content.
+- [`\@AEX` ](src/include/modules/AEX/ares.cpp) Additions : [IF-ELSE-ELIF](src/include/modules/AEX/ares.cpp#L206-247) blocks, [`\#BLOCK` & `\#BLOCKEND`](src/include/modules/AEX/ares.cpp#L288-352) for LongForm File Additions(using APPEND or WRITE.), New AEX Version (you might wanna update your scripts :3)
+
+## 0.0.14-Alpha Additions:
+- [`\C`](src/shell.cpp#L27-43) : Run OneShot Commands/Scripts without running on a interactive loop. *NEW
+- [`\QUIET`](src/shell.cpp#L44-51) : Silences the BTHM(Boot Time Help Message) header on Interactive Mode. *NEW
+- `%var` autocompletion (In-Dev) : ARES now autocompletes `%env` with a value from the environment variables. (Could be risky, added for EOU(Ease Of Use) reasons, and to avoid repetitive tasks). *REIMPLEMENTATION
+> It is recommended that this is used carefully, as ENV does not have guardrails on sensitive data.
+
+
+- [ARES::BOOTTIME::`%SHELL`](src/include/get_self_path.cpp#L16-25) : Now, ARES can find where this is installed by using `/proc/self/exe` on Linux (Linux Specific, needs tidying for macOS) before setting the [`SHELL`](src/include/core_sys.cpp#L27-28) environment variable
+- [ARES::ENV::`%ARES_VERSION`](src/include/core_sys.cpp#L25-26) : ARES_VERSION now holds a more detailed ARES version string (Default ARES Version + BRANCH). *TWEAK
+- [ARES::ENV::`%ARES_RELEASE`](src/include/core_sys.cpp#L26-27) : ARES_RELEASE Environment holds a string for Release No and Release Date. *NEW
 
 **And so much more!**

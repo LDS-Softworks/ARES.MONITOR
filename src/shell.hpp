@@ -26,7 +26,10 @@
 // later the ARES Monitor will have ARES_AUTOMATE to auto-handle stuff, but for
 // now, and it'll require a LOT of builtins to work, so, maybe leave them
 // alone... for the sake of their and your own sanity.
-extern std::unordered_map<std::string, CommandFunc> commands;
+namespace ARES::CORE
+{
+  extern std::unordered_map<std::string, CommandFunc> commands;
+}
 // MARK - \@REPORT Logic. for if-else block reproting of errors into the
 // public-error counter.
 void handle_report(const std::vector<std::string> &args) {
@@ -36,8 +39,8 @@ void handle_report(const std::vector<std::string> &args) {
   // Shift tokens to run the command inside the report
   std::vector<std::string> sub_tokens(args.begin() + 1, args.end());
 
-  if (commands.count(sub_tokens[0])) {
-    commands[sub_tokens[0]](sub_tokens);
+  if (ARES::CORE::commands.count(sub_tokens[0])) {
+    ARES::CORE::commands[sub_tokens[0]](sub_tokens);
     // last_error_code is set by external runs or handle_syntax_punishment
     // You can now check this value for your IF-ELSE logic.
   }
