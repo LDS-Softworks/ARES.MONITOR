@@ -1,5 +1,3 @@
-
-namespace ARES {
 #pragma once
 #include "std_glbl.hpp"
 #include <fstream>
@@ -7,14 +5,16 @@ namespace ARES {
 #include <sstream>
 #include <string>
 #include <vector>
+
+namespace ARES {
   namespace RTE::EXTERNALS {
       extern void run_external(const std::string &cmd, const std::vector<std::string> &args);
     }
 namespace MODULES {
 namespace AEX {
 
-  std::string parserV = "0.0.13-alpha";
-  std::string parser_rev = "2026-05-04";
+  std::string parserV = "0.0.14-alpha";
+  std::string parser_rev = "2026-05-20";
 
 // External tokenizer
     extern std::vector<std::string> smart_tokenize(const std::string &input);

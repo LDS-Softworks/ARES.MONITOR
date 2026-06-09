@@ -8,7 +8,7 @@
 BINARY_X86="bin/ARES.MON.MACOS_x64"
 INSTALL_DIR="$HOME/.local/bin"
 
-# Determine Architecture, so we can flip off arm64 users, yes, we do not use that at LDS LLC.
+# Determine Architecture, so we can flip off arm64 users, yes, we do not use that at LDS.
 ## Comment out the arm if block if you wish to accept the risk of your actions.
 ARCH=$(uname -m)
 echo "Detected architecture: $ARCH"

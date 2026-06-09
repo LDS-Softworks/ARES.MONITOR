@@ -1,9 +1,12 @@
 #pragma once
 // Initialize Global Memory Counter
+#include <filesystem>
 #include "std_glbl.hpp"
 #include <ostream>
 #include "get_self_path.cpp"
-namespace ARES {
+
+namespace ARES{
+extern std::string current_path;
 namespace CORE {
   /**
    * @brief Initializes the system by loading environment variables and setting up global state.
@@ -28,6 +31,9 @@ void init_system()
   global_err_ptr = (unsigned long long *)malloc(sizeof(unsigned long long));
   if (global_err_ptr)
     *global_err_ptr = 0;
+  // Set the current path on start, so later we update it with \@CWD <path>.
+  ARES::current_path = std::filesystem::current_path();
+  // There is no environment variable of this one. because... well... why?.
 }
 // Logic to check for memory cap
 void check_memory_integrity()

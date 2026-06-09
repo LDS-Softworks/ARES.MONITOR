@@ -93,6 +93,19 @@ Added more "Quick Start" commands on ["Start Message"](src/include/std_glbl.hpp#
 
 Minor patch on [get_self_path()](src/include/get_self_path.cpp#L16-61) method to ensure safe fallbacks on other platforms.
 ___
+### 0.0.14-Alpha (Patch 2 - 2026-05-20 8:40 PM [PDT]) changes:
+
+- Added required command [`\@DCD`](src/include/fs_ops.cpp#L16-20) including a new global state set on Init (Initializes the "current dir" on start, to avoid empty returns.)
+
+- Fixed a small edge case when trying to remove directories/files with "RECURSIVE", now it simply logs the error instead of crashing the whole shell.
+
+- Finally added the "WITHEXT" functionality on `\@DELETE FILE ...`, as this was not finished on last patch.
+
+- Added a few logging messages for when running certain commands (forgot exactly where, has been a long week.)
+
+- AEX Parser Version changed, please update your scripts (Updated for Parity reasons.)
+
+___
 ___
 **And so much more!**
 ___

@@ -2,7 +2,7 @@
 
 ##
 ##  Helpers/install.sh
-##  Copyright (c) 2025 Lilly Aizawa @ LDS LLC. All rights reserved.
+##  Copyright (c) 2025 Lilly Aizawa @ LDS. All rights reserved.
 ##  License: MIT
 ##  Helper script to install ARES MONITOR on a Linux system, and refuse if we are on Android or if we somehow passed through the macOS Checks by the Make task.
 ##

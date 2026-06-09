@@ -18,3 +18,5 @@ zig-cache*
 zig*
 targets
 big*
+*.zip
+*.tar.*

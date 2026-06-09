@@ -3,7 +3,7 @@
 # --- OS Detection ---
 ## We at LDS have decided that Microsoft's Windows does NOT deserve our interest, if you wish to compile for said arch.
 ## You may create your own fork and compile it with your own Compile rules.
-# - Lilly Aizawa (LDS LLC's CEO)
+# - Lilly Aizawa (LDS 's CEO)
 ifeq ($(OS),Windows_NT)
     OS_TYPE := Windows ## Windbloat is still banned from existing anywhere near THIS Project.
 else
@@ -65,7 +65,7 @@ else ifeq ($(OS_TYPE),macOS)
 else ifeq ($(OS_TYPE), Windows)
 	@printf "\e[31mLDS LLC(c) does not distribute for Microsoft(R) Windows NT(c)/r).\e[0m\n"
 	@printf "\e[31mWe refuse to provide binaries for any MS Product, now or ever.\e[0m\n"
-	@printf "\e[32mThanks. - LDS LLC(c)\e[0m\n"
+	@printf "\e[32mThanks. - LDS (c)\e[0m\n"
 	@exit 1
 else ifeq ($(OS_TYPE), Android)
 	@printf "\e[31mAndroid is not supported as a build platform,\e[0m,"
@@ -88,7 +88,7 @@ macos: $(SOURCES)
 
 linux-native: $(SOURCES)
 	@echo "Compiling Linux binary..."
-	@$(CXX) $(CFLAGS) $(INCLUDES) $^ -o $(LINUXCOUT)
+	@$(CXX) $(CFLAGS) $(INCLUDES) -lssl -lcrypto $^ -o $(LINUXCOUT)
 
 linux-cross: $(SOURCES)
 	@echo "Cross-compiling for Linux via Zig..."
