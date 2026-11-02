@@ -66,7 +66,20 @@ ALLWMOD:
 	@echo All modules will be built...
 	@make CFLAGS+=-D__MODULE_AEX CFLAGS+=-D__MODULE_ASC
 
-
+## Shared Library Object: ./bin/lib/libares.so
+## Planned Use with WMF, but not yet implemented, this is a PLACEHOLDER for future implementation.
+## PLEASE, if you are a developer trying to bundle ARES as a shared execution layer for your own projects:
+# 1. Why are you doing that?
+# 2. Be aware that BY ITSELF, libares is NOT a fully working ARES Environment, and it will by itself lack MOST of the functionality that ARES has if you don't reimplement it.
+#    libares is STILL a work in progress, and by itself, ARES was never meant to work as such, this was made simply to torture 李月.
+#
+#   If you REALLY want to use libares, well... suit yourself, knock yourself out. i take NO responsibility for your actions.
+#   And make sure to use WMF::Modules::AEX's namespace on your libares calls... why that? because AEX is the only thing i cared enough to tell libares to expose.
+#   But, as far as my knowledge goes, you can use most callbacks if you know the namespaces and call names as well as their arguments... they're on:
+#      ./src/include/std_glbl.hpp
+#      ./src/include/**
+#   Literally just read through them, and you will find how the functions work, are called, and how you COULD implement them into your own project.
+#   Again, don't do that. BASH is very portable.
 libares:
 	@echo Building against Embedded Shared Library Target.
 	@$(MAKE) -f libares.mk all
