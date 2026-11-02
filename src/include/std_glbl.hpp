@@ -65,10 +65,12 @@ const unsigned long long MEM_LIMIT =
 typedef std::function<void(const std::vector<std::string> &)> CommandFunc;
 namespace ARES{
     namespace MODULES {
+        #ifdef __MODULE_AEX
         namespace AEX {
             extern std::vector<std::string> smart_tokenize(const std::string &input);
             extern void execute_Ares_Automation(const std::vector<std::string> &args);
         }
+        #endif
     }
     namespace SYSTEM
     {
@@ -113,6 +115,7 @@ namespace ARES{
             extern void handle_exec(const std::vector<std::string> &args);
             // Redundant definition.
             extern void run_external(const std::string &binary, const std::vector<std::string> &args);
+            extern std::string execute_inline(const std::string &binary, const std::vector<std::string> &args);
         }
     }
     namespace CORE
@@ -172,7 +175,9 @@ std::unordered_map<std::string, CommandFunc> commands = {
     {"\\@KILALL",
      ARES::SYSTEM::CTRL::handle_kill}, // Mapping to same handler, because i am not rewriting this
                    // fucking logic, suck it up. - Lilly Aizawa.
+    #ifdef __MODULE_AEX
     {"\\@AEX", ARES::MODULES::AEX::execute_Ares_Automation},
+    #endif
     {"\\@CTC", ARES::IO::clearTerminalContents},
     {"\\!?", ARES::RTE::ENV::handle_last_err},
     {"\\*?", ARES::RTE::ENV::getErrors},

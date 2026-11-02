@@ -153,22 +153,22 @@ namespace ARES
     
       std::cout << "[LISTING]: " << fs::absolute(target_path) << "\n";
       std::cout << "------------------------------------------\n";
-    
+    for (const auto &entry : fs::directory_iterator(target_path)) {
       try {
-        for (const auto &entry : fs::directory_iterator(target_path)) {
+
           std::string type_label = entry.is_directory() ? "[D] " : "[F] ";
           std::string size_info = "<DIR>";
-        
+
           // ONLY call file_size if it is NOT a directory
           if (!entry.is_directory()) {
             const long long KB = 1024;
             const long long MB = KB * 1024;
             const long long GB = MB * 1024;
             const long long TB = GB * 1024;
-          
+
             std::string size_measure = " B";
             double final_size = static_cast<double>(entry.file_size());
-          
+
             if (entry.file_size() >= TB) {
               final_size /= TB;
               size_measure = " TB";
@@ -182,7 +182,7 @@ namespace ARES
               final_size /= KB;
               size_measure = " KB";
             }
-          
+
             // Clean string formatting
             std::stringstream ss;
             ss << std::fixed << std::setprecision(2) << final_size << size_measure;
@@ -192,11 +192,12 @@ namespace ARES
           std::cout << type_label << std::left << std::setw(20)
                     << entry.path().filename().string() << " | " << size_info
                     << "\n";
-        }
       } catch (const std::exception &e) {
         session_errors.push_back("[LDC]:[Could Not Read Entry]:[SystemMessage:" +
                                  std::string(e.what()) + "]");
       }
+    }
+
       std::cout << "------------------------------------------" << std::endl;
     }
   }

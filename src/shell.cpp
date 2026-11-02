@@ -11,6 +11,8 @@ namespace ARES {
     }
   }
 }
+// Normal Standalone workings, this affects only if you are building ARES as a WMF Module for LDSTS' Window Markup Format.
+#ifndef __SELF_LIBARES
 // ovbious main entry point. we might or might not need this... just saying, i
 // is very self-explanatory.
 int main(int argc, char *argv[]) {
@@ -45,19 +47,21 @@ int main(int argc, char *argv[]) {
         return last_error_code;
     }
     // Deadbrain simple checking for the quiet flag.
-  if (argc > 1 && argv[1] == std::string("\\QUIET")) {
-
+  if (argc > 1 && argv[1] == std::string("\\QUIET") || argv[1] == "-q" || fs::exists(ARES::RTE::ENV::internal_vars["HOME"]+"/.QUIET")) {
+    // I compressed this into a single line... because i disliked the code clutter of 100 if checks for the same shit.
+    // Now it all checks for either flags, or the file in a single if check, if any of those return true, we skip the help message, which is a bit of the point of
+    // the quiet flag anyways.
   }
-  // same, mute the header if there is a .QUIET File.
-  else if (fs::exists(ARES::RTE::ENV::internal_vars["HOME"]+"/.QUIET")){
-
-  }
+  /// Oh, and this is the actual execution of the help message.  super duper complex process of putting a string out into the console.
+  // I know, I know, super duper complex.
   else {
     std::cout << ARES::CORE::HELP::HLPMSG << std::endl;
   }
   std::string line;
+  // These are... a bit for AEX, AEX defines these again(i believe), but. i am paranoid.
   bool condition_active = false; // are we inside an #IF block?
   bool condition_met = false;    // did the condition pass?
+
   // This is me being nice. and yes, it is hardcoded.
   // You get ONE way to personalize your environment before i drop you into the Interactive Prompt.
   // I know this is flaky. but, you shouldn't really worry about this, since all this does is run an init script if it exists. and is AEX, so, properly documented stuff.
@@ -69,8 +73,19 @@ int main(int argc, char *argv[]) {
       ARES::CORE::commands[tokens[0]](tokens);
     }
   }
+  const fs::path default_prompt_file = fs::path(ARES::RTE::ENV::internal_vars["HOME"]) / "System/Programs/ARES/prompt";
   while (true) {
-    std::cout << "ARES &> ";  // The prompt you see in the shell, this is hardcoded for now, but, yes, i am thinking about making it customizable in the future by using PlainASCIIStrings.
+    // debug print.
+    std::string prompt = "ARES &> "; // default prompt, if no prompt file is found.
+    printf("Checking for prompt file at: %s\n", default_prompt_file.string().c_str());
+    if (fs::exists(default_prompt_file)) {
+      std::ifstream prompt_file(default_prompt_file);
+      if (prompt_file.is_open()) {
+        std::getline(prompt_file, prompt);
+        prompt_file.close();
+      }
+    }
+    std::cout << prompt;  // The prompt you see in the shell, this is hardcoded for now, but, yes, i am thinking about making it customizable in the future by using PlainASCIIStrings.
                               // No, we are not getting ANSI ECS in the prompt. that is NOT going to be a thing.
 
     // Redundant parsing :v
@@ -135,3 +150,39 @@ int main(int argc, char *argv[]) {
   }
   return 0;
 }
+#endif
+
+#ifdef __SELF_LIBARES
+#include <vector>
+namespace WMF::Module::AEX {
+  using namespace ARES::MODULES;
+  void *executeAEXInline(
+    std::stringstream *wmfConvertedFile /*
+      Takes a stream of data for parsing, this so we can execute AEX instructions in Window Markup Format as a Interaction Format alongside
+      WMF Visual Scripting.
+    */
+    ) {
+    // Initialize the environment variables required by AEX.
+    ARES::CORE::init_system();
+
+    // Still in the works. DO NOT compile against libares, as libares is not yet a working library.
+    // Placeholder for future implementation of AEX inside WMF.
+
+  }
+
+  // Same as above, but takes a file path instead.
+  void *executeAEXInline(
+    fs::path pathToFile /*
+      Takes a file for parsing. AEX takes a file anyways, so we skip the whole complex InLine Parsing.
+    */
+    ) {
+    ARES::CORE::init_system();
+
+    // Compose the arguments for AEX. AEX needs a file path anyways, so, all we do is pass the path as is.
+    std::vector<std::string> args;
+    args.push_back((std::string)pathToFile);
+    ARES::MODULES::AEX::execute_Ares_Automation(args);
+  }
+
+}
+#endif

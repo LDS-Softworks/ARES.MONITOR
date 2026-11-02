@@ -45,7 +45,7 @@ ANDROID_FLAGS = -I$(OPENSSL_ANDROID_PATH)/include -L$(OPENSSL_ANDROID_PATH)/lib 
 ZIGCXX      = zig c++
 CXX         = clang++
 INCLUDES 	=  -I./src/include -I./src/include/* -I./src/include/modules/transcript/
-BOOSTINCLUDES = -I/usr/local/Cellar/boost/1.90.0_1/include 
+BOOSTINCLUDES = -I/usr/local/Cellar/boost/1.90.0_1/include
 ZIGCFLAGS_LINUX = -target x86_64-linux-musl
 CFLAGS      = -std=c++17
 SOURCES     := $(wildcard src/*.cpp)
@@ -59,6 +59,18 @@ COUT         = bin/ARES.MON.MACOS_x64 # macOS X86_64 output(arm64 output if appl
 # --- Build Targets ---
 all: build
 
+# Target to build all modules into ARES.
+# If you defined any other modules, add them here so they are compiled into the binary. if not, these could be skipped.
+# Please wrap your modules into a #ifdef __MODULE_%MODNAME%. to make this process easier.
+ALLWMOD:
+	@echo All modules will be built...
+	@make CFLAGS+=-D__MODULE_AEX CFLAGS+=-D__MODULE_ASC
+
+
+libares:
+	@echo Building against Embedded Shared Library Target.
+	@$(MAKE) -f libares.mk all
+
 ## Target to build it all supported types, for all supported OSes(Except Windows, obviously.)
 allTargets: macos android linux-native linux-cross cross-android
 
@@ -68,16 +80,16 @@ ifeq ($(OS_TYPE),Linux)
 else ifeq ($(OS_TYPE),macOS)
 	@$(MAKE) macos
 else ifeq ($(OS_TYPE), Windows)
-	@printf "\e[31mLDS LLC(c) does not distribute for Microsoft(R) Windows NT(c)/r).\e[0m\n"
-	@printf "\e[31mWe refuse to provide binaries for any MS Product, now or ever.\e[0m\n"
-	@printf "\e[32mThanks. - LDS (c)\e[0m\n"
+	@printf "\033[31mLDS LLC(c) does not distribute for Microsoft(R) Windows NT(c)/r).\033[0m\n"
+	@printf "\033[31mWe refuse to provide binaries for any MS Product, now or ever.\033[0m\n"
+	@printf "\033[32mThanks. - LDS (c)\033[0m\n"
 	@exit 1
 else ifeq ($(OS_TYPE), Android)
-	@printf "\e[31mAndroid is not supported as a build platform,\e[0m,"
+	@printf "\033[31mAndroid is not supported as a build platform,\033[0m,"
 	@echo " But you can cross-compile for Android using the 'linux-native' target directly if you have the necessary libraries through PKG on Termux, or the 'cross-android' target if you have an available NDK."
 	@exit 1
 else
-	@printf "Unsupported OS: \e[31m$(OS_TYPE)\e[0m\n"
+	@printf "Unsupported OS: \033[31m$(OS_TYPE)\033[0m\n"
 	@echo "This build system so far only supports Linux and macOS as build platforms, with the ability to cross-compile against Android and Linux through Zig and the Android NDK."
 	@echo "If you wish to add support for your OS, please incrementally add for so, create a Fork, and submit to PR Review."
 	@exit 126
@@ -95,6 +107,7 @@ linux-native: $(SOURCES)
 	@echo "Compiling Linux binary..."
 	@$(CXX) $(CFLAGS) $(INCLUDES) -lssl -lcrypto $^ -o $(LINUXCOUT)
 
+## Missing SSL and Crypto libraries because... idk, idk where macOS has the compatLinux SSL/Crypto/OpenSSL Libraries at. or if i can even use those.
 linux-cross: $(SOURCES)
 	@echo "Cross-compiling for Linux via Zig..."
 	@$(ZIGCXX) $(ZIGCFLAGS_LINUX) $(INCLUDES) $^ -o $(LINUXCOUT)
@@ -128,20 +141,30 @@ else ifeq ($(OS_TYPE),Linux)
 	@echo "- For a Privileged Installation (under /usr/local/bin, may require su su and constant acknowledgment of changes): 'PRIVILEGED_INSTALL=true make install'"
 	@echo "Or if you wish to simply install with the default settings, just run 'make install'. This will attempt to install under $(HOME)/System/Public/Programs, if not found, it will proceed to try and unstall under /usr/local/bin, using su, which will ask for your password on each step."
 	@$(MAKE) linstall
+else ifeq ($(OS_TYPE), linux)
+	@echo "Android Install directory is Termux's PREFIX/bin directory. this is by default necessary."
+	@$(MAKE) aninstall
+
 endif
+
+## Specific target for installing under Android... this is Termux Only, or something that sets $PREFIX to a safely writeable directory.
+## If its not writeable. this script will absolutely bork it.
+## And no, we don't have fallbacks for this. so, pray for it to work.
+aninstall: $(LINUXCOUT)
+	@bash ./Helpers/android_install.sh
 
 macinstall: $(COUT)
 	@echo "Installing for macOS..."
 	@bash ./Helpers/macinstall.sh
 
 ## I did a few changes on this one to not just go straight into copying files... but, to ask the user to CONFIRM the action.
-## JIC you mistyped.
+## JIC you mistyped. - change: aborting is not an error, that was an old assumption of mine, now it properly returns 0 on exit by aborting the operation.
 linstall: $(LINUXCOUT)
 	@echo "Installing for Linux..."
 	@echo -n "This process will write changes to disk. Proceed? (y/n): " && read yN; \
 	case "$$yN" in \
 		[yYsS]*) echo "Proceeding..." ;; \
-		*) echo "Installation aborted." ; exit 1 ;; \
+		*) echo "Installation aborted." ; exit 0 ;; \
 	esac; \
 	if [ -n "$(INSTPATH)" ]; then \
 		bash ./Helpers/install.sh --prefix "$(INSTPATH)"; \

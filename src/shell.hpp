@@ -15,8 +15,9 @@
 #include "hlt.cpp"
 
 // .ares scripting support.
+#ifdef __MODULE_AEX
 #include "modules/AEX/ares.cpp" // ARES Automation Execution eXtension
-
+#endif
 // Filesystem bullshit.
 #include <filesystem>
 namespace fs = std::filesystem;

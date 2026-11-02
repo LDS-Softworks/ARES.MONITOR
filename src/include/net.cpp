@@ -32,6 +32,8 @@ extern int last_error_code;
 namespace ARES {
     extern bool has_flag(const std::vector<std::string> &args, const std::string &flag);
 namespace MODULES::NETWORK {
+
+#ifdef __MODULE_NUTILS
 using namespace ARES;
 // this kinda doesn't work on macOS Yet... and you kinda don't wanna remove this ifdef... just saying...
 #ifdef __linux__
@@ -389,7 +391,7 @@ static std::string get_flag_value(const std::vector<std::string> &args,
 }
 // ── \@REQUEST ────────────────────────────────────────────────────────────────
 //
-//   \@REQUEST HTTP "<url>" [\EXPECT "<code>"] [\WITH-DATA "<mime/type>"]
+//   \@REQUEST HTTP "<url>" [\033XPECT "<code>"] [\WITH-DATA "<mime/type>"]
 //   [VERBOSE]
 //
 void handle_networkRequest(const std::vector<std::string> &args) {
@@ -631,6 +633,6 @@ void handle_networkPing(const std::vector<std::string> &args) {
 }
 
 #endif // __linux__
-
+#endif // __MODULE_NUTILS
 } // namespace MODULES::NETWORK
 } // namespace ARES

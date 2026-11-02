@@ -1,7 +1,10 @@
 // general write function for Writing stuff to terminal or files.
 // yes, that's a thing.
 #pragma once
-#include "modules/transcript/arescript.cpp"
+#ifdef __MODULE_ASC
+  // The arescript module itself.
+  #include "modules/transcript/arescript.cpp"
+#endif
 #include "std_glbl.hpp"
 #include <string>
 #include <unistd.h>
@@ -48,7 +51,7 @@ namespace IO::FileOperations {
 
       std::string content = "";
 
-      // Phase 1: Input
+      //Input
       if (args[1] == "FROM" && args.size() >= 3) {
         // Check if it's a variable reference
         if (args[2][0] == '%') {
@@ -81,18 +84,19 @@ namespace IO::FileOperations {
       } else {
         content = args[1];
       }
-    
-      // Phase 1.5: Inline %VAR interpolation
+
+      // Inline %VAR interpolation
       content = ARES::RTE::ENV::interpolate_vars(content);
-    
-      // Phase 2: Arescript Processor
+
+      #ifdef __MODULE_ASC
+      // Arescript Processor - Module
       for (size_t i = 0; i < args.size(); ++i) {
         if (args[i] == "WITH" && i + 1 < args.size()) {
           content = ARES::MODULES::ARESCRIPT::apply_arescript(content, args[i + 1]);
         }
       }
-    
-      // Phase 3: Output
+      #endif
+      // Output
       bool saved = false;
       for (size_t i = 0; i < args.size(); ++i) {
         if (args[i] == "TO" && i + 1 < args.size()) {
@@ -115,7 +119,7 @@ namespace IO::FileOperations {
       }
 
       std::string content = "";
-    
+
       // Phase 1: Input
       if (args[1] == "FROM" && args.size() >= 3) {
         if (args[2][0] == '%') {
@@ -140,7 +144,7 @@ namespace IO::FileOperations {
       } else {
         content = args[1];
       }
-    
+
       // Phase 1.5: Inline %VAR interpolation
       content = ARES::RTE::ENV::interpolate_vars(content);
 

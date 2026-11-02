@@ -11,7 +11,7 @@ namespace ARES {
                 "2. Data Type Definitions: Standardized definitions for data types used in ARES Monitor interactions.\n"
                 "3. Calling Conventions: Guidelines on how functions should be called within the ARES Monitor environment.\n"
                 "4. Error Handling: Standard error codes and handling procedures for ABI-related operations.\n\n"
-                "For detailed documentation, please refer to the official ARES Monitor ABI documentation at \e]8;;https://softworks.aizawallc.org/APOSI/?Topic=ARES%2FABI%2FReference\e\\APOSI-ABI-Reference\e]8;;\e\\\n"
+                "For detailed documentation, please refer to the official ARES Monitor ABI documentation at \033]8;;https://softworks.aizawallc.org/APOSI/?Topic=ARES%2FABI%2FReference\033\\APOSI-ABI-Reference\033]8;;\033\\\n"
                 "----------------------------\n";
         }
     }

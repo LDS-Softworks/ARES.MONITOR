@@ -29,12 +29,14 @@ const std::unordered_map<std::string, std::string> HELP_DB = {
                   "<\"name\"> | FILE WITHEXT <\".ext\">]"},
     {"\\@EXEC", "Usage: \\@EXEC <\"binary\"> [args...] - Executes an external "
                 "POSIX binary."},
+    #ifdef __MODULE_AEX
     {"\\@AEX", "Usage: \\@AEX <\"script.ares\"> <TIMES <n>> - Executes an ARES "
                "(A)utomation (EX)ecution script with built-in syntax. made for "
                "Non-redundant testing."},
     {"\\@AEX_TIMES",
      "Executes an automation script a certain number of times (up to around 5 "
      "times, this limit can change eventually.)"},
+     #endif
     {"\\@KILL", "Usage: \\@KILL [PID <id> | <\"name\">] - Forcefully "
                 "terminates a process."},
     {"\\@ENV",
@@ -62,8 +64,8 @@ const std::unordered_map<std::string, std::string> HELP_DB = {
      "\t\tAPOSI-EXTERANL: Commands are prefixed with '@' or preceded by "
      "'\\@EXEC '\n\n"
      "Refer to the documentation at "
-     "\e]8;;https://softworks.aizawallc.org/APOSI/\e\\LDS APOSI "
-     "Documentation\e]8;;\e\\\n"
+     "\033]8;;https://softworks.aizawallc.org/APOSI/\033\\LDS APOSI "
+     "Documentation\033]8;;\033\\\n"
      "for detailed information about this standard.\n"
      "\n\n\tCopyright (c) 2025 Lilly Aizawa and LDS LLC. All rights reserved."},
     {"\\ARES",
@@ -77,11 +79,11 @@ const std::unordered_map<std::string, std::string> HELP_DB = {
          "capabilities and memory safe features to prevent user's abuse.\n\n"
          "for on-system information about the APOSI standard, run \\@HELP "
          "APOSI\nFor cloud information about the APOSI standard, visit "
-         "\e]8;;https://softworks.aizawallc.org/APOSI/?Topic=Standard%2FAPOSI "
-         "Standard\e\\LDS APOSI Standard\e]8;;\e\\\n"
+         "\033]8;;https://softworks.aizawallc.org/APOSI/?Topic=Standard%2FAPOSI "
+         "Standard\033\\LDS APOSI Standard\033]8;;\033\\\n"
          "For more information about the ARES Monitor software, visit "
-         "\e]8;;https://softworks.aizawallc.org/APOSI/?Topic=ARES%2FARES "
-         "Quickstart\e\\APOSI:ARES Monitor Quick-Start Information\e]8;;\e\\\n"
+         "\033]8;;https://softworks.aizawallc.org/APOSI/?Topic=ARES%2FARES "
+         "Quickstart\033\\APOSI:ARES Monitor Quick-Start Information\033]8;;\033\\\n"
          "\n\n\tCopyright (c) 2025 Lilly Aizawa and LDS Softworks LLC. All "
          "rights reserved."},
     {"\\C", "Shell Modifier || Usage: @/path/to/ares \\C <ARES_CMD> - Executes "

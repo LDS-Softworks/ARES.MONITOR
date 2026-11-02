@@ -361,6 +361,7 @@ void execute_Ares_Automation(const std::vector<std::string> &args) {
   last_error_code = 0;
   update_flags();
 }
+
 }
 }
 } // namespace ARES

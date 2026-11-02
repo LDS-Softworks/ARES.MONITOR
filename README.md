@@ -37,6 +37,19 @@ $ make -j$(nproc) # you can specify the maximum amount of jobs that MAKE can inv
 ```
 to build the `bin/ARES.MON` target.
 
+## If you need specific modules
+You can define modules by you or by others by using the CFLAGS variable.
+using a command such as:
+```bash
+$ make -j$(nproc) CFLAGS+=-D__MODULE_AEX ## Or any other module such as __MODULE_ASC for Arescript
+```
+
+or use
+```bash
+$ make ALLWMOD -j$(nproc)
+```
+to include all defined modules.
+
 ## How to clean binaries?
 ___
 You can clean binaries either by doing:
@@ -123,6 +136,10 @@ ___
 - Small commenting in codebase.
 
 ___
+
+# Untagged:
+- Fixed Make Flags for Modules (Now AEX Module requires a Compiler Definition to be included.)
+
 **And so much more!**
 ___
 ___
