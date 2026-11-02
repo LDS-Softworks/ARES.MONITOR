@@ -88,6 +88,11 @@ libares:
 allTargets: macos android linux-native linux-cross cross-android
 
 build:
+	if [ -d "bin/lib" ]; then \
+		echo "bin/lib exists, continuing..."; \
+	else \
+		mkdir -p bin/lib; \
+	fi
 ifeq ($(OS_TYPE),Linux)
 	@$(MAKE) linux-native
 else ifeq ($(OS_TYPE),macOS)

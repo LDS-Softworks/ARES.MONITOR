@@ -8,4 +8,9 @@ SOURCES     := $(wildcard src/*.cpp)
 .PHONY: all clean
 
 all:
+	if [ -d "bin/lib" ]; then \
+		echo "bin/lib exists, continuing..."; \
+	else \
+		mkdir -p bin/lib; \
+	fi
 	$(CXX) $(CFLAGS) $(INCLUDES) -o $(OUT) $(SOURCES)
