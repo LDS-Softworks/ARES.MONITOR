@@ -14,10 +14,10 @@
 #define STD_GLBL_HPP
 
 // Version information.
-const std::string ARES_VERSION = "0.0.14-alpha";
-const std::string ARES_RELEASE = "R2";
-const std::string RELEASE_DATE = "2026-05-17";
-const std::string BRANCH = "STABLE";
+const std::string ARES_VERSION = "1.0.1-alpha";
+const std::string ARES_RELEASE = "R1";
+const std::string RELEASE_DATE = "2026-11-5";
+const std::string BRANCH = "TESTING";
 
 #include <termios.h>
 inline struct termios orig_termios;

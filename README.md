@@ -6,21 +6,22 @@ A basic Monitor for Linux/macOS with VERY specific Types.
 
 Made for the funs and giggles to cause YOU headaches and constant 'No Command Specified.' errors.
 
+## BRANCH: RigetsuBSD - 2nd-LVL Kernel
+This branch assumes it will run inside `初影イヌテラクチベ`'s RigetsuBSD 2L-Userland.
+- Target SDK: OpenOrbis SDK(Source Assumptions) / PS4SDK(Untested Option)
+- Target PS4 System Firmware Version: 14.00
 ____
 ___
 ## How to build?
 
 ### Before Building
 
-*This project requires either macOS or Linux's version of clang++ (LLVM) and MAKE (Both installable either through Xcode or apt/emerge/pacman)*
+*This project requires either macOS or Linux's version of a compatible PS4 SDK with support for 14.00 Firmware and MAKE*
 > Requirements:General
 >>  make, bash/sh/fish/zsh, g++/c++/clang, cstdio(libc++, glibc++), openssl(libopenssl-dev)
 
 > Requirements:Cross-Compiling
->> macOS -> Linux : zig musl
-homebrew
->> Linux -> Android : [Android NDK](.NDK/README.md)
->> Android -x Unsupported as Build Environment, cannot Cross-Compile or Locally-Build (as far as testing has proven.)
+>> any -> OrbisOS(OpenOrbis/PS4SDK)
 ___
 ___
 ## Compiling
@@ -35,13 +36,13 @@ or
 ```bash
 $ make -j$(nproc) # you can specify the maximum amount of jobs that MAKE can invoke by calling nproc to get the systm's available cores
 ```
-to build the `bin/ARES.MON` target.
+to build the `bin/ARES_RBSD.elf` target.
 
 ## If you need specific modules
 You can define modules by you or by others by using the CFLAGS variable.
 using a command such as:
 ```bash
-$ make -j$(nproc) CFLAGS+=-D__MODULE_AEX ## Or any other module such as __MODULE_ASC for Arescript
+$ make -j$(nproc) CFLAGS+=-D__MODULE_AEX ## Or any other module such as __MODULE_ASC for Arescript | Not recommended, as RBSD is heavily minimal.
 ```
 
 or use
@@ -82,64 +83,9 @@ ___
 ___
 # Changeslog
 
-## 0.0.13-Alpha Additions:
-- [`\@APPEND`](src/include/write.cpp#L102-161) : Append stuff to a file, either using variables or plaintext content.
-- [`\@AEX` ](src/include/modules/AEX/ares.cpp) Additions : [IF-ELSE-ELIF](src/include/modules/AEX/ares.cpp#L206-247) blocks, [`\#BLOCK` & `\#BLOCKEND`](src/include/modules/AEX/ares.cpp#L288-352) for LongForm File Additions(using APPEND or WRITE.), New AEX Version (you might wanna update your scripts :3)
-___
-___
-## 0.0.14-Alpha Additions:
-- [`\C`](src/shell.cpp#L27-43) : Run OneShot Commands/Scripts without running on a interactive loop. *NEW
-- [`\QUIET`](src/shell.cpp#L44-51) : Silences the BTHM(Boot Time Help Message) header on Interactive Mode. *NEW
-- `%var` autocompletion (In-Dev) : ARES now autocompletes `%env` with a value from the environment variables. (Could be risky, added for EOU(Ease Of Use) reasons, and to avoid repetitive tasks). *REIMPLEMENTATION
-> It is recommended that this is used carefully, as ENV does not have guardrails on sensitive data.
+**Inherited Changes from [refs/main](https://github.com/LDS-Softworks/ARES.MONITOR/blob/main/README.md)**
 
-
-- [ARES::BOOTTIME::`%SHELL`](src/include/get_self_path.cpp#L16-25) : Now, ARES can find where this is installed by using `/proc/self/exe` on Linux (Linux Specific, needs tidying for macOS) before setting the [`SHELL`](src/include/core_sys.cpp#L27-28) environment variable
-- [ARES::ENV::`%ARES_VERSION`](src/include/core_sys.cpp#L25-26) : ARES_VERSION now holds a more detailed ARES version string (Default ARES Version + BRANCH). *TWEAK
-- [ARES::ENV::`%ARES_RELEASE`](src/include/core_sys.cpp#L26-27) : ARES_RELEASE Environment holds a string for Release No and Release Date. *NEW
-___
-___
-### 0.0.14-alpha (Patch 1 - 2026-05-17 6:00 AM [PDT] ) changes:
-Added [`\@CEL`](src/include/getErrors.cpp#L21-32) command for clearing error logs.
-
-Added more "Quick Start" commands on ["Start Message"](src/include/std_glbl.hpp#L127-142)
-
-Minor patch on [get_self_path()](src/include/get_self_path.cpp#L16-61) method to ensure safe fallbacks on other platforms.
-___
-### 0.0.14-Alpha (Patch 2 - 2026-06-9 6:16 PM [PDT]) changes:
-
-- Added required command [`\@DCD`](src/include/fs_ops.cpp#L16-20) including a new global state set on Init (Initializes the "current dir" on start, to avoid empty returns.)
-
-- Fixed a small edge case when trying to remove directories/files with "RECURSIVE", now it simply logs the error instead of crashing the whole shell.
-
-- Fixed small edge-case on symlinks crashing ARES' command `\@LDC` and making so only a few files were listed.
-
-- Finally added the "WITHEXT" functionality on `\@DELETE FILE ...`, as this was not finished on last patch.
-
-- Added a few logging messages for when running certain commands (forgot exactly where, has been a long week.)
-
-- New Network Requests Commands (`\@REQUEST`, `\@FETCH` and `\@REACH`).
-___
-
-### 0.0.14-Alpha Release 2 2026-09-04 6:00 AM [PDT] Changes:
-
-- Fixed Small bug with `\@WRITE` : Writing FROM file and `%ENV` would cause `%THING/file` to be interpreted as a single string.
-    Now this is fixed(doing fuckery math.)
-> No, i do not know what caused that bug.
-
-- Added: `%HOME/.QUIET` HEADER Silencing, now if the file exists, this will remove the need to specify `\QUIET`.
-
-- Added: `%HOME/System/Programs/ARES/preinit.ares` Profile File. Dependant on user, can be used to print or do anything that AEX allows you to.
-
-- AEX Parser Version changed, please update your scripts (Updated for Parity reasons.)
-
-- Small commenting in codebase.
-
-___
-
-# Untagged:
-- Fixed Make Flags for Modules (Now AEX Module requires a Compiler Definition to be included.)
-
-**And so much more!**
+## 0.1.14
+- Branch: Removed Unecessary Make Targets : Focus on RigetsuBSD's ABI
 ___
 ___

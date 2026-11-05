@@ -13,10 +13,10 @@ namespace ARES {
 namespace MODULES {
 namespace AEX {
 
-  std::string parserV = "0.0.14-alpha"; // New AEX Preinit Feature, Bumped version.
-  // BEFORE: 0.0.13-alpha
-  // AFTER : 0.0.14-alpha
-  std::string parser_rev = "2026-09-04"; // YY-MM-DD, i finally explained my fucking date format. apparently miracles happen.
+  std::string parserV = "1.0.1-alpha"; // Mayor Change: Platform Port->RigetsuBSD
+  // BEFORE: 0.0.14-alpha
+  // AFTER : 1.0.1-alpha
+  std::string parser_rev = "2026-11-05"; // YY-MM-DD, i finally explained my fucking date format. apparently miracles happen.
 
 // External tokenizer
     extern std::vector<std::string> smart_tokenize(const std::string &input);
